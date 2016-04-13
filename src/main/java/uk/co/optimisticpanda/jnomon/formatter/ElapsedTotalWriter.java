@@ -15,7 +15,7 @@ public class ElapsedTotalWriter implements EventListener {
     }
 
     @Override
-    public void onBefore(long processStartTime, long lastStartTime, String line) {
+    public void onLineStart(long processStartTime, long lastStartTime, String line) {
         onUpdate(processStartTime, lastStartTime);
         System.out.printf("%8s  %s %s\n", "", BORDER, line);
     }
@@ -25,5 +25,10 @@ public class ElapsedTotalWriter implements EventListener {
         String text = format("%8ss %s", SECONDS_FORMAT.format((currentTimeMillis() - processStartTime) / 1000d), BORDER);
         Colour colour = colourChooser.colourForDuration(currentTimeMillis() - currentStartTime);
         System.out.print("\033[1A\r" + colour.colourize(text) + "\n");
+    }
+
+    @Override
+    public void onLineEnd(long processStartTime, long lastStartTime, String lastLine) {
+        System.out.printf("%8ss %s %s\n", SECONDS_FORMAT.format((currentTimeMillis() - processStartTime) / 1000d), BORDER, lastLine);
     }
 }

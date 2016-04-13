@@ -17,7 +17,7 @@ public class AbsoluteOutputWriter implements EventListener {
     }
 
     @Override
-    public void onBefore(long processStartTime, long lastStartTime, String line) {
+    public void onLineStart(long processStartTime, long lastStartTime, String line) {
         onUpdate(lastStartTime, lastStartTime);
         System.out.printf("%24s %s %s\n", " ", BORDER, line);
     }
@@ -27,5 +27,10 @@ public class AbsoluteOutputWriter implements EventListener {
         String text = format("%24s %s", Instant.now().toString(), BORDER);
         Colour colour = colourChooser.colourForDuration(currentTimeMillis() - currentStartTime);
         System.out.print("\033[1A\r" + colour.colourize(text) + "\n");
+    }
+    
+    @Override
+    public void onLineEnd(long processStartTime, long lastStartTime, String lastLine) {
+        System.out.printf("%24ss %s %s\n", Instant.now().toString(), BORDER, lastLine);
     }
 }

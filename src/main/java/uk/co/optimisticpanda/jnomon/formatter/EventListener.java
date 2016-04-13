@@ -4,7 +4,11 @@ import uk.co.optimisticpanda.jnomon.ColourChooser;
 
 public interface EventListener {
     
-    default void onBefore(long processStartTime, long lastStartTime, String line) {
+    default void onBeforeAll() {
+        // NO-OP
+    }
+    
+    default void onLineStart(long processStartTime, long lastStartTime, String line) {
         // NO-OP
     }
 
@@ -12,12 +16,18 @@ public interface EventListener {
         // NO-OP
     }
 
-    default void onEnd() {
+    default void onLineEnd(long processStartTime, long lastStartTime, String lastLine) {
+        // NO-OP
+    }
+
+    default void onFinally(long processStartTime, long currentStartTime) {
         // NO-OP
     }
     
     public interface EventListenerFactory {
         EventListener build(ColourChooser colourChooser);
     }
-    
+
+
+
 }

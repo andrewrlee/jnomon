@@ -15,7 +15,7 @@ public class ElapsedLineOutputWriter implements EventListener {
     }
     
     @Override
-    public void onBefore(long processStartTime, long lastStartTime, String line) {
+    public void onLineStart(long processStartTime, long lastStartTime, String line) {
         onUpdate(lastStartTime, lastStartTime);
         System.out.printf("%8s  %s %s\n", "", BORDER, line);
     }
@@ -26,5 +26,11 @@ public class ElapsedLineOutputWriter implements EventListener {
         String text = format("%8ss %s", SECONDS_FORMAT.format((elapsed) / 1000d), BORDER);
         Colour colourForDuration = colourChooser.colourForDuration(elapsed);
         System.out.print("\033[1A\r" + colourForDuration.colourize(text) + "\n");
+    }
+    
+    @Override
+    public void onLineEnd(long processStartTime, long lastStartTime, String lastLine) {
+        long elapsed = currentTimeMillis() - lastStartTime;
+        System.out.printf("%8ss %s %s\n", SECONDS_FORMAT.format((elapsed) / 1000d), BORDER, lastLine);
     }
 }
